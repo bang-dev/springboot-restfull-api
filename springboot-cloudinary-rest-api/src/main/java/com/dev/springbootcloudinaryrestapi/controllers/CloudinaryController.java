@@ -1,6 +1,10 @@
 package com.dev.springbootcloudinaryrestapi.controllers;
 
 import com.dev.springbootcloudinaryrestapi.controllers.urls.CloudURL;
+import com.dev.springbootcloudinaryrestapi.entities.Photo;
+import com.dev.springbootcloudinaryrestapi.exceptions.CloudinaryException;
+import com.dev.springbootcloudinaryrestapi.exceptions.DatabaseException;
+import com.dev.springbootcloudinaryrestapi.exceptions.NotFoundException;
 import com.dev.springbootcloudinaryrestapi.models.PhotoUpload;
 import com.dev.springbootcloudinaryrestapi.services.ICloudinaryService;
 import com.dev.springbootmongorestapi.exceptions.ValidationCode;
@@ -9,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -43,6 +49,24 @@ public class CloudinaryController {
             return HandlerResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, ValidationCode.CREATE_FAILED.getCodeNumber(500),"Faild",photoUpload);
         }
         return null;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getPhotoById(@PathVariable String id) {
+        try {
+            Photo photoData = iCloudinaryService.getPhotoById(id);
+            if(photoData == null) {photoData = new Photo();}
+            byte[] imageBytes = photoData.getData();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return HandlerResponse.generateResponse(HttpStatus.OK,headers,ValidationCode.FOUND.getCodeNumber(203),"Founded",imageBytes);
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (DatabaseException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (CloudinaryException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
