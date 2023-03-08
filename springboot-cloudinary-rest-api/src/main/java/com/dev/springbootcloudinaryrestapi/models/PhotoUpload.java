@@ -1,13 +1,19 @@
 package com.dev.springbootcloudinaryrestapi.models;
 
 import com.dev.springbootcloudinaryrestapi.entities.Photo;
+import com.dev.springbootmongorestapi.entities.DataItem;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
-
-public class PhotoUpload implements Serializable {
-     private String id;
+@Data
+@Setter @Getter
+@Document(collection = "photos_upload")
+public class PhotoUpload extends DataItem implements Serializable {
      private String name;
      private String description;
      private String location;
@@ -16,7 +22,6 @@ public class PhotoUpload implements Serializable {
      public Photo photo;
 
      public static class Builder{
-          private String id;
           private String name;
           private String description;
           private String location;
@@ -25,10 +30,6 @@ public class PhotoUpload implements Serializable {
           private Photo photo;
 
 
-          public Builder buildID(String id){
-               this.id = id;
-               return this;
-          }
           public Builder buildName(String name){
                this.name = name;
                return this;
@@ -63,7 +64,6 @@ public class PhotoUpload implements Serializable {
      }
 
      public PhotoUpload(Builder builder) {
-         this.id = builder.id;
           this.name = builder.name;
           this.description = builder.description;
           this.location = builder.location;

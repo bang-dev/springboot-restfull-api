@@ -1,18 +1,22 @@
 package com.dev.springbootcloudinaryrestapi.entities;
 
 import com.dev.springbootmongorestapi.entities.DataItem;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 @Data
 @Getter @Setter
 @Document(collection = "photos")
+@AllArgsConstructor
 public class Photo extends DataItem implements Serializable {
+
     private String name;
     private String url;
     private long size;
@@ -22,10 +26,18 @@ public class Photo extends DataItem implements Serializable {
     private String publicId;
     private String format;
 
+    public Photo() {
+
+    }
+    public Photo(String id, byte[] data) {
+        super();
+        this.data = data;
+    }
+
+
 
     public static class Builder{
 
-        private String id;
         private String name;
         private String url;
         private long size;
@@ -33,11 +45,6 @@ public class Photo extends DataItem implements Serializable {
         private String description;
         private String publicId;
         private String format;
-
-        public Builder buildID(String id){
-            this.id = id;
-            return this;
-        }
 
         public Builder builderName(String name){
             this.name = name;
@@ -85,13 +92,13 @@ public class Photo extends DataItem implements Serializable {
             return this;
         }
 
+
         public Photo build(){
            return new Photo(this);
         }
     }
 
     public Photo(Builder builder) {
-        setId(builder.id);
         this.name = builder.name;
         this.url = builder.url;
         this.size = builder.size;

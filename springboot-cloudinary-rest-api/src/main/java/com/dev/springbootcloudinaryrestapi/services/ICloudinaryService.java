@@ -6,4 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ICloudinaryService {
     PhotoUpload upload(MultipartFile file,String name, String description, String location, String dateTaken);
+    Photo getPhotoById(String id);
 }
