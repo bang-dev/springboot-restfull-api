@@ -2,10 +2,12 @@ package com.dev.springbootcloudinaryrestapi.controllers;
 
 import com.dev.springbootcloudinaryrestapi.controllers.urls.CloudURL;
 import com.dev.springbootcloudinaryrestapi.entities.Photo;
+import com.dev.springbootcloudinaryrestapi.entities.Video;
 import com.dev.springbootcloudinaryrestapi.exceptions.CloudinaryException;
 import com.dev.springbootcloudinaryrestapi.exceptions.DatabaseException;
 import com.dev.springbootcloudinaryrestapi.exceptions.NotFoundException;
 import com.dev.springbootcloudinaryrestapi.models.PhotoUpload;
+import com.dev.springbootcloudinaryrestapi.models.VideoUpload;
 import com.dev.springbootcloudinaryrestapi.services.ICloudinaryService;
 import com.dev.springbootmongorestapi.exceptions.ValidationCode;
 import com.dev.springbootmongorestapi.responses.HandlerResponse;
@@ -33,7 +35,7 @@ public class CloudinaryController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @PostMapping("/upload")
+    @PostMapping("/upload/photos")
     public ResponseEntity<Object> uploadPhoto(@RequestParam("file") MultipartFile file,
                                                    @RequestParam("name") String name,
                                                    @RequestParam("description") String description,
@@ -51,7 +53,7 @@ public class CloudinaryController {
         return null;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/upload/photos/{id}")
     public ResponseEntity<Object> getPhotoById(@PathVariable String id) {
         try {
             Photo photoData = iCloudinaryService.getPhotoById(id);
@@ -68,6 +70,50 @@ public class CloudinaryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+
+
+
+    @PostMapping("/upload/videos")
+    public ResponseEntity<Object> uploadVideo(@RequestParam("file") MultipartFile file,
+                                              @RequestParam("title") String title,
+                                              @RequestParam("name") String name,
+                                              @RequestParam("description") String description,
+                                              @RequestParam("location") String location,
+                                              @RequestParam("dateTaken") String dateTaken) {
+        VideoUpload videoUpload = null;
+        try {
+            if(null!= file) {
+                videoUpload = iCloudinaryService.upload(file,title, name, description, location, dateTaken);
+                return HandlerResponse.generateResponse(HttpStatus.CREATED, ValidationCode.CREATED.getCodeNumber(200), "success", videoUpload);
+            }
+        } catch (Exception e) {
+            return HandlerResponse.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, ValidationCode.CREATE_FAILED.getCodeNumber(500),"Faild",videoUpload);
+        }
+        return null;
+    }
+
+
+
+    @GetMapping("/upload/videos/{id}")
+    public ResponseEntity<Object> getVideoById(@PathVariable String id) {
+        try {
+            Video videoData = iCloudinaryService.getVideoById(id);
+            if(videoData == null) {videoData = new Video();}
+            byte[] videoBytes = videoData.getData();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.valueOf(MediaType.MULTIPART_FORM_DATA_VALUE));
+            return HandlerResponse.generateResponse(HttpStatus.OK,headers,ValidationCode.FOUND.getCodeNumber(203),"Founded",videoBytes);
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (DatabaseException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (CloudinaryException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity handleMaxSizeException(MaxUploadSizeExceededException ex) {

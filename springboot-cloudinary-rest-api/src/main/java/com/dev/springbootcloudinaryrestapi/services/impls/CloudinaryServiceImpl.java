@@ -1,16 +1,20 @@
 package com.dev.springbootcloudinaryrestapi.services.impls;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.EagerTransformation;
 import com.cloudinary.Singleton;
 import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 import com.dev.springbootcloudinaryrestapi.entities.Photo;
+import com.dev.springbootcloudinaryrestapi.entities.Video;
 import com.dev.springbootcloudinaryrestapi.exceptions.DatabaseException;
 import com.dev.springbootcloudinaryrestapi.exceptions.InvalidRequestException;
 import com.dev.springbootcloudinaryrestapi.exceptions.NotFoundException;
 import com.dev.springbootcloudinaryrestapi.models.PhotoUpload;
+import com.dev.springbootcloudinaryrestapi.models.VideoUpload;
 import com.dev.springbootcloudinaryrestapi.services.ICloudinaryService;
 import com.dev.springbootcloudinaryrestapi.services.IPhotoService;
+import com.dev.springbootmongorestapi.utils.AlphabetUtils;
 import com.mongodb.MongoException;
 import com.mongodb.client.gridfs.model.GridFSFile;
 
@@ -30,9 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class CloudinaryServiceImpl implements ICloudinaryService {
@@ -58,27 +60,29 @@ public class CloudinaryServiceImpl implements ICloudinaryService {
             try {
 
                 Map uploadResult = cloudinary.uploader().upload(uploadFile, ObjectUtils.emptyMap());
-                byte[] data = file.getBytes();
-                Map<String, String> options = new HashMap<>();
-                options.put("resource_type", "auto");
-                options.put("public_id", file.getOriginalFilename().split("\\.")[0]);
-                Photo photo = new Photo.Builder()
-                        .builderName(file.getOriginalFilename())
-                        .builderDescription("")
-                        .builderPublicId((String) uploadResult.get("public_id"))
-                        .builderUrl((String) uploadResult.get("url"))
-                        .builderFormat((String) uploadResult.get("format"))
-                        .builderSize(Long.valueOf(String.valueOf(uploadResult.get("bytes"))))
-                        .builderData(data).build();
-                this.mongoTemplate.insert(photo);
-                PhotoUpload photoUpload = new PhotoUpload.Builder()
-                        .buildName(name)
-                        .buildDescription(description)
-                        .buildLocation(location)
-                        .buildDateTaken(dateTaken)
-                        .buildPhoto(photo).build();
-                PhotoUpload result = this.mongoTemplate.insert(photoUpload);
-                return result;
+                        if(uploadResult != null) {
+                            byte[] data = file.getBytes();
+                            Map<String, String> options = new HashMap<>();
+                            options.put("resource_type", "auto");
+                            options.put("public_id", file.getOriginalFilename().split("\\.")[0]);
+                            Photo photo = new Photo.Builder()
+                                    .builderName(file.getOriginalFilename())
+                                    .builderDescription("")
+                                    .builderPublicId((String) uploadResult.get("public_id"))
+                                    .builderUrl((String) uploadResult.get("url"))
+                                    .builderFormat((String) uploadResult.get("format"))
+                                    .builderSize(Long.valueOf(String.valueOf(uploadResult.get("bytes"))))
+                                    .builderData(data).build();
+                            this.mongoTemplate.insert(photo);
+                            PhotoUpload photoUpload = new PhotoUpload.Builder()
+                                    .buildName(name)
+                                    .buildDescription(description)
+                                    .buildLocation(location)
+                                    .buildDateTaken(dateTaken)
+                                    .buildPhoto(photo).build();
+                            PhotoUpload result = this.mongoTemplate.insert(photoUpload);
+                            return result;
+                        }
             } catch (IOException exc) {
                 exc.printStackTrace();
             }/*finally {
@@ -117,5 +121,85 @@ public class CloudinaryServiceImpl implements ICloudinaryService {
         return null;
     }
 
+
+    @Override
+    public VideoUpload upload(MultipartFile file, String name, String title, String description, String location, String dateTaken) {
+        try {
+            File uploadFile = convertMultiPartFileToFile(file);
+            try {
+                    Map uploadResult = cloudinary.uploader().upload(uploadFile,
+                            ObjectUtils.asMap("resource_type", "video",
+                                    "public_id", file.getOriginalFilename().split("\\.")[0],
+                                    "eager", Arrays.asList(
+                                            new EagerTransformation().width(300).height(300).crop("pad").audioCodec("none"),
+                                            new EagerTransformation().width(160).height(100).crop("crop").gravity("south").audioCodec("none")),
+                                    "eager_async", true,
+                                    "eager_notification_url", null));
+                    Map<String, String> options = new HashMap<>();
+                    options.put("resource_type", "video");
+                    options.put("chunk_size", "6000000");
+                    options.put("public_id", file.getOriginalFilename().split("\\.")[0]);
+                    byte[] data = file.getBytes();
+                    Video video = new Video.Builder()
+                            .builderName(file.getOriginalFilename())
+                            .builderTitle((AlphabetUtils.generateNewAlphabetRandom() + "_" + new Date()))
+                            .builderDescription("")
+                            .builderPublicId((String) uploadResult.get("public_id"))
+                            .builderUrl((String) uploadResult.get("secure_url"))
+                            .builderResource(options.put("resource_type", "video"))
+                            .builderFormat((String) uploadResult.get("format"))
+                            .builderChunkSize(options.put("chunk_size", "6000000"))
+                            .builderSize(Long.valueOf(String.valueOf(uploadResult.get("bytes"))))
+                            .builderData(data).build();
+                    this.mongoTemplate.insert(video);
+                    VideoUpload videoUpload = new VideoUpload.Builder()
+                            .builderName(name)
+                            .builderTitle("")
+                            .builderDescription(description)
+                            .builderLocation(location)
+                            .builderDateTaken(dateTaken)
+                            .builderVideo(video).build();
+                    VideoUpload result = this.mongoTemplate.insert(videoUpload);
+                    return result;
+            } catch (IOException exc) {
+                exc.printStackTrace();
+            }/*finally {
+            uploadFile.delete();
+        }*/
+        } catch (IOException exc) {
+            exc.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Video getVideoById(String id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(id));
+        Video video = this.mongoTemplate.findOne(query, Video.class);
+        String url = "";
+        if (null == video){
+            video = new Video();
+        }
+        url = video.getUrl();
+        try ( InputStream inputStream = new URL(url).openStream()) {
+            byte[] videoBytes = IOUtils.toByteArray(inputStream);
+            Video videoSource = new Video(id,videoBytes);
+
+            String videoUrl = cloudinary.url().resourceType("video").format("mp4").generate(videoSource.getPublicId());
+            Video rs = new Video(id,videoUrl);
+            return rs;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IllegalArgumentException e) {
+            throw new InvalidRequestException("Invalid id format: " + id);
+        } catch (MongoException e) {
+            throw new DatabaseException("Error fetching video with id: " + id, e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
