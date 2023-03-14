@@ -3,14 +3,17 @@ package com.dev.springbootcloudinaryrestapi;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.SingletonManager;
 import com.cloudinary.utils.ObjectUtils;
+import com.dev.SwaggerOrgConfigs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.dev.springbootcloudinaryrestapi.*")
 @EnableScheduling
+@Import(SwaggerOrgConfigs.class)
 public class SpringbootCloudinaryRestApiApplication {
     private static final Logger logger = LoggerFactory.getLogger(SpringbootCloudinaryRestApiApplication.class);
     public static void main(String[] args) {

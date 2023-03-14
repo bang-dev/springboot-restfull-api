@@ -23,6 +23,7 @@ public class Video extends  DataItem implements Serializable {
     private String chunkSize;
     private long size;
     private byte[] data;
+    public boolean isPrivate;
     public static class Builder {
         private String name;
         private String title;
@@ -34,6 +35,7 @@ public class Video extends  DataItem implements Serializable {
         private String chunkSize;
         private long size;
         private byte[] data;
+        public boolean isPrivate;
 
         public Builder builderName(String name){
             this.name = name;
@@ -85,9 +87,13 @@ public class Video extends  DataItem implements Serializable {
             return this;
         }
 
-
+        public Builder builderIsPrivate(boolean isPrivate){
+            this.isPrivate = isPrivate;
+            return this;
+        }
 
         public Video build(){
+
             return new Video(this);
         }
 
@@ -116,5 +122,6 @@ public class Video extends  DataItem implements Serializable {
         this.chunkSize = builder.chunkSize;
         this.size = builder.size;
         this.data = builder.data;
+        this.isPrivate = builder.isPrivate;
     }
 }

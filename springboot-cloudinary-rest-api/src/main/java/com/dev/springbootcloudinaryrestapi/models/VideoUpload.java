@@ -87,4 +87,7 @@ public class VideoUpload extends DataItem implements Serializable {
         this.file = builder.file;
         this.video =builder.video;
     }
+
+    public VideoUpload() {
+    }
 }
