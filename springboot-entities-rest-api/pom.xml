@@ -8,11 +8,11 @@
         <version>2.7.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.dev.springbootcloudinaryrestapi</groupId>
-    <artifactId>springboot-cloudinary-rest-api</artifactId>
+    <groupId>com.dev</groupId>
+    <artifactId>springboot-entities-rest-api</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>springboot-cloudinary-rest-api</name>
+    <name>springboot-entities-rest-api</name>
     <description>Project for Spring Boot</description>
     <properties>
         <java.version>8</java.version>
@@ -20,13 +20,18 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -43,45 +48,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.cloudinary</groupId>
-            <artifactId>cloudinary-http44</artifactId>
-            <version>1.33.0</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.cloudinary</groupId>
-            <artifactId>cloudinary-taglib</artifactId>
-            <version>1.33.0</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.12</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.dev.springbootmongorestapi</groupId>
-            <artifactId>springboot-mongo-rest-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.dev</groupId>
-            <artifactId>springboot-swagger-rest-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -97,16 +76,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.1.0</version>
             </plugin>
         </plugins>
     </build>
