@@ -1,4 +1,4 @@
-package com.dev.springbootcloudinaryrestapi.controllers;
+package com.dev.springbootcloudinaryrestapi.controllers.apis;
 
 import com.dev.springbootcloudinaryrestapi.controllers.urls.CloudURL;
 import com.dev.springbootcloudinaryrestapi.entities.Photo;
@@ -11,6 +11,7 @@ import com.dev.springbootcloudinaryrestapi.models.VideoUpload;
 import com.dev.springbootcloudinaryrestapi.services.ICloudinaryService;
 import com.dev.springbootmongorestapi.exceptions.ValidationCode;
 import com.dev.springbootmongorestapi.responses.HandlerResponse;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping(CloudURL.ORG_CLOUD)
+@Api(value = "CloudinaryController", description = "Operations pertaining to Cloudinary Controller")
 public class CloudinaryController {
 
     @Autowired
@@ -35,6 +37,18 @@ public class CloudinaryController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @ApiOperation(value = "Returns image uploaded", notes = "This endpoint returns a image upload to cloudinary.",response = String.class)
+    @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not found")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer access token", required = true, paramType = "header"),
+            @ApiImplicitParam(name = "X-Client-ID", value = "Client ID", required = true, paramType = "header")
+    })
     @PostMapping("/upload/photos")
     public ResponseEntity<Object> uploadPhoto(@RequestParam("file") MultipartFile file,
                                                    @RequestParam("name") String name,
