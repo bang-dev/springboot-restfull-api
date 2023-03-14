@@ -65,7 +65,7 @@ public class DateTimeUtils {
 
     public static String convertFromDateToString(Date date){
          date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         String strDate = dateFormat.format(date);
         return strDate;
     }

@@ -9,6 +9,7 @@ import com.dev.springbootmongorestapi.mappers.IProfileMapper;
 import com.dev.springbootmongorestapi.responses.ErrorResponse;
 import com.dev.springbootmongorestapi.responses.HandlerResponse;
 import com.dev.springbootmongorestapi.services.IProfileService;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.List;
 @RestController
 @ControllerAdvice
 @RequestMapping(value = ProfileURL.ORG_URL)
+@Api(value = "ProfileController", description = "Operations pertaining to Profile Controller")
 public class ProfileController {
 
     @Autowired
@@ -34,7 +36,18 @@ public class ProfileController {
     private IProfileMapper iProfileMapper;
 
 
+    @ApiOperation(value = "Returns all profile", notes = "This endpoint returns a profile info",response = String.class)
     @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not found")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer access token", required = true, paramType = "header"),
+            @ApiImplicitParam(name = "X-Client-ID", value = "Client ID", required = true, paramType = "header")
+    })
     public ResponseEntity<Object> viewAll(){
         try{
             List<Profile> list = this.iProfileService.all();
@@ -46,7 +59,23 @@ public class ProfileController {
         return null;
     }
 
+    @ApiOperation(value = "Returns a new profile", notes = "This endpoint returns a greeting message to new profile.",response = String.class)
     @PostMapping(value = ProfileURL.ADD_URL)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not found")
+    })
+   /* @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved user"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })*/
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer access token", required = true, paramType = "header"),
+            @ApiImplicitParam(name = "X-Client-ID", value = "Client ID", required = true, paramType = "header")
+    })
     public ResponseEntity<Object> create(@RequestBody ProfileDTO profileDTO){
         try {
             Profile profile = this.iProfileMapper.convertFromProfileDtoToProfile(profileDTO);
