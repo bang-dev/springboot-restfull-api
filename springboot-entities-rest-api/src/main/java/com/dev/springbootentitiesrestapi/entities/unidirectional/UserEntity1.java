@@ -24,9 +24,10 @@ public class UserEntity1 extends DataItemEntity implements Serializable {
     private String username;
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "role1_id")
-    @Column(name = "role_entity1")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="RoleEntity1$id", insertable=false ,updatable=false)
+    @Column(name="RoleEntity1$id")
+    @Access(AccessType.PROPERTY)
     private RoleEntity1 roleEntity1;
 
 
