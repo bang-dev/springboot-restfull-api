@@ -8,6 +8,8 @@ public class SpringbootEntitiesRestApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringbootEntitiesRestApiApplication.class, args);
+        System.out.println("Welcome to my springboot with JPA...");
     }
 
 }
+

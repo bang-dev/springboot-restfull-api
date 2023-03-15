@@ -12,8 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Getter @Setter
 @Entity
@@ -30,4 +30,17 @@ public class RoleEntity1 extends DataItemEntity implements Serializable {
     private String description;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RoleEntity1)) return false;
+        if (!super.equals(o)) return false;
+        RoleEntity1 that = (RoleEntity1) o;
+        return getRoleType().equals(that.getRoleType()) && getDescription().equals(that.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getRoleType(), getDescription());
+    }
 }
