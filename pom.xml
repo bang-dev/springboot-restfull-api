@@ -16,6 +16,7 @@
     <modules>
         <module>springboot-mongo-rest-api</module>
         <module>springboot-cloudinary-rest-api</module>
+        <module>springboot-entities-rest-api</module>
         <module>springboot-swagger-rest-api</module>
     </modules>
     <properties>
