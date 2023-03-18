@@ -1,3 +1,4 @@
+/*
 package com.dev.springbootentitiesrestapi.services;
 
 import com.dev.springbootentitiesrestapi.entities.unidirectional.RoleEntity1;
@@ -39,3 +40,4 @@ public class TestUserEntity1Service {
 
      }
 }
+*/

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class UserEntity1 extends DataItemEntity implements Serializable {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Override
     public String getId() {
         return super.getId();

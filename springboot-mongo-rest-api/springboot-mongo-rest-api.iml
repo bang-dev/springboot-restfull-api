@@ -13,15 +13,7 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="SwaggerConfigs" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/com/dev/springbootmongorestapi/SwaggerConfigs.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/dev/springbootmongorestapi/BeanConfigs.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/dev/springbootmongorestapi/MongoConfigs.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/dev/springbootmongorestapi/SpringbootMongoRestApiApplication.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/dev/springbootmongorestapi/WebServiceConfig.java</file>
-        </fileset>
-      </configuration>
+      <configuration />
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
@@ -33,7 +25,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-mongodb:2.7.5" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.7.5" level="project" />

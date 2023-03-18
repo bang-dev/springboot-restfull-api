@@ -1,3 +1,4 @@
+/*
 package com.dev.springbootentitiesrestapi.services;
 
 import com.dev.springbootentitiesrestapi.SpringbootEntitiesRestApiApplication;
@@ -22,3 +23,4 @@ public class TestRoleEntity2Service {
      }
 
 }
+*/

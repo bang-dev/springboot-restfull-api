@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Table(name = "users2")
 public class UserEntity2 extends DataItemEntity implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Override
     public String getId() {
         return super.getId();
