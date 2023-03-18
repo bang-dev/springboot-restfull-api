@@ -1,0 +1,11 @@
+schema {
+    query: Query
+}
+
+type Query {
+    profile(id: String!): Profile
+}
+
+type Profile {
+   id: String!
+}

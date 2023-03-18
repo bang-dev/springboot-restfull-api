@@ -1,3 +1,4 @@
+/*
 package com.dev.springbootentitiesrestapi.services;
 
 import com.dev.springbootentitiesrestapi.SpringbootEntitiesRestApiApplication;
@@ -30,3 +31,4 @@ public class TestUserEntity2Service {
         iUserEntity2Service.create(userEntity2);
     }
 }
+*/

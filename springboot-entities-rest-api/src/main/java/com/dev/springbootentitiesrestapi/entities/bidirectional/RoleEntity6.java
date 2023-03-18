@@ -16,6 +16,7 @@ import java.util.List;
 public class RoleEntity6 extends DataItemEntity implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Override
     public String getId() {
         return super.getId();

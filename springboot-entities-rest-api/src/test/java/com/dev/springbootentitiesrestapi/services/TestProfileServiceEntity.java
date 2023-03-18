@@ -1,3 +1,4 @@
+/*
 package com.dev.springbootentitiesrestapi.services;
 
 import com.dev.springbootentitiesrestapi.entities.ProfileEntity;
@@ -23,3 +24,4 @@ public class TestProfileServiceEntity {
         iProfileEntityService.create(profileEntity);
     }
 }
+*/

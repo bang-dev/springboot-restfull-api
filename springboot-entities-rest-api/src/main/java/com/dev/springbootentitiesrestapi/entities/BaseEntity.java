@@ -17,6 +17,7 @@ public class BaseEntity implements Serializable {
 
     private String id;
 
+    private BaseComplexObjectID objectID;
     public BaseEntity() {
         this.id = GenerateUtils.generateNewId(UUID.randomUUID().toString());
     }
