@@ -5,10 +5,12 @@ import com.dev.springbootmongorestapi.dtos.ProfileDTO;
 import com.dev.springbootmongorestapi.entities.Profile;
 import com.dev.springbootmongorestapi.mappers.IProfileMapper;
 import com.dev.springbootmongorestapi.services.IProfileService;
+import org.eclipse.microprofile.graphql.GraphQLApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+@GraphQLApi
 @Component
 public class ProfileResolver implements GraphQLResolver<ProfileDTO> {
     @Autowired

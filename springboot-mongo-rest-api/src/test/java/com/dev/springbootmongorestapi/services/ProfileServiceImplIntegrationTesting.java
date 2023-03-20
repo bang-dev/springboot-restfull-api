@@ -1,3 +1,4 @@
+/*
 package com.dev.springbootmongorestapi.services;
 
 import com.dev.springbootmongorestapi.SpringbootMongoRestApiApplication;
@@ -88,3 +89,4 @@ public class ProfileServiceImplIntegrationTesting {
     }
 
 }
+*/

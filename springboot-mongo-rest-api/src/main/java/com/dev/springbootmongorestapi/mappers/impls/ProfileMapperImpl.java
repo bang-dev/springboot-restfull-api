@@ -34,7 +34,7 @@ public class ProfileMapperImpl implements IProfileMapper {
         profileDto.setCreatedAt(profile.getCreatedAt());
         profileDto.setUpdatedAt(profile.getUpdatedAt());
         profileDto.setCreatedBy(profile.getCreatedBy());
-        profileDto.setUpdateBy(profile.getUpdatedBy());
+        profileDto.setUpdatedBy(profile.getUpdatedBy());
         return profileDto;
     }
 
@@ -56,7 +56,7 @@ public class ProfileMapperImpl implements IProfileMapper {
         profile.setCreatedAt(profileDto.getCreatedAt());
         profile.setUpdatedAt(profileDto.getUpdatedAt());
         profile.setCreatedBy(profileDto.getCreatedBy());
-        profile.setUpdatedBy(profileDto.getUpdateBy());
+        profile.setUpdatedBy(profileDto.getUpdatedBy());
         return profile;
     }
 

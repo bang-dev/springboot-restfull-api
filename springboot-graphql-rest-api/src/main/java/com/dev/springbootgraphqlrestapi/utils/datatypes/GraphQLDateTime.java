@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 @Component
@@ -18,6 +21,11 @@ public class GraphQLDateTime {
     public static final String ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(ISO_FORMAT);
+
+    private static LocalDateTime localDateTime = LocalDateTime.now();
+    private static ZoneId zoneId = ZoneId.of("America/New_York"); // example time zone
+    private static ZoneOffset zoneOffset = zoneId.getRules().getOffset(localDateTime);
+    private static OffsetDateTime offsetDateTime = OffsetDateTime.of(localDateTime, zoneOffset);
 
     @Bean
     public static GraphQLScalarType dateTimeScalar() {
@@ -59,3 +67,6 @@ public class GraphQLDateTime {
                 .build();
     }
 }
+
+
+

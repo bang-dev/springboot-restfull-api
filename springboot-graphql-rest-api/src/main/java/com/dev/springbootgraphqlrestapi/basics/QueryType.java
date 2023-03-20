@@ -6,9 +6,11 @@ import graphql.schema.GraphQLNonNull;
 import graphql.schema.GraphQLObjectType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import static graphql.Scalars.GraphQLString;
 
+@Component
 public class QueryType {
 
     @Autowired
@@ -17,7 +19,7 @@ public class QueryType {
             .name("Query")
             .field(field -> field
                     .name("profile")
-                    .type(ProfileType.profileType)
+                    .type(ProfileType.PROFILE_TYPE)
                     .description("Get a profile by ID")
                     .argument(arg -> arg.name("id").type(new GraphQLNonNull(GraphQLString)))
                     .dataFetcher(environment -> {

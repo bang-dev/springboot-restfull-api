@@ -2,6 +2,10 @@ package com.dev.springbootgraphqlrestapi.utils;
 
 import com.dev.springbootgraphqlrestapi.batchloaders.ProfileBatchLoader;
 import com.dev.springbootgraphqlrestapi.datafetchers.ProfileGraphQLDataFetcher;
+import com.dev.springbootgraphqlrestapi.utils.datatypes.GraphQLBlob;
+import com.dev.springbootgraphqlrestapi.utils.datatypes.GraphQLDate;
+import com.dev.springbootgraphqlrestapi.utils.datatypes.GraphQLDateTime;
+import com.dev.springbootgraphqlrestapi.utils.datatypes.GraphQLOffsetDateTimeScalar;
 import com.dev.springbootmongorestapi.dtos.ProfileDTO;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -26,7 +30,6 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
 
@@ -44,12 +47,28 @@ public class GraphQLProvider {
      @Autowired
      private ProfileGraphQLDataFetcher profileGraphQLDataFetcher;
 
+     @Autowired
      private ProfileBatchLoader profileBatchLoader;
 
      public GraphQLProvider(GraphQL graphQL) {
           this.graphQL = graphQL;
      }
 
+     public Environment getEnv() {
+          return env;
+     }
+
+     public void setEnv(Environment env) {
+          this.env = env;
+     }
+
+     public GraphQL getGraphQL() {
+          return graphQL;
+     }
+
+     public void setGraphQL(GraphQL graphQL) {
+          this.graphQL = graphQL;
+     }
 
      @Bean
      @Scope(value = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -62,16 +81,22 @@ public class GraphQLProvider {
           DataLoaderOptions options = DataLoaderOptions.newOptions().setCacheMap(customCache);
 
          DataLoader<String, ProfileDTO> profileLoaders = DataLoader.newDataLoader(profileBatchLoader.getProfileBatchLoader(), options);// dataLoaderRegistry.register("countries", countryLoader);
-          dataLoaderRegistry.register("profiles", profileLoaders);
+          dataLoaderRegistry.register("getProfiles", profileLoaders);
           return dataLoaderRegistry;
      }
 
+     @SuppressWarnings("Beta")
      @PostConstruct
      public void init() throws IOException {
-          URL url = Resources.getResource(env.getProperty("com.dev.springboot-graphql-rest-api.graphql.schema"));
+          //graphqls/schema/profiles.graphqls
+          URL url = Resources.getResource("graphqls/schema/profiles.graphqls");
           String sdl = Resources.toString(url, Charsets.UTF_8);
           GraphQLSchema graphQLSchema = buildSchema(sdl);
-          this.graphQL = GraphQL.newGraphQL(graphQLSchema).build();
+          graphQL = GraphQL.newGraphQL(graphQLSchema).build();
+          //********************
+
+         // this.graphQL = GraphQLUtility.createGraphQlObject();
+
      }
 
      private GraphQLSchema buildSchema(String sdl) {
@@ -83,10 +108,19 @@ public class GraphQLProvider {
 
      private RuntimeWiring buildWiring() {
           return RuntimeWiring.newRuntimeWiring()
-                  .scalar(ExtendedScalars.DateTime)
-                  .scalar(ExtendedScalars.Date)
+                  .scalar(GraphQLDateTime.dateTimeScalar())
+                  .scalar(GraphQLDate.dateScalar())
+                  .scalar(GraphQLBlob.blobScalar())
+                  .scalar(GraphQLOffsetDateTimeScalar.graphQLOffsetDateTimeScalar())
+                 /* .scalar(ExtendedScalars.DateTime)
+                  .scalar(ExtendedScalars.Date)*/
                   .type(newTypeWiring("Query")
-                          .dataFetcher("getAll", profileGraphQLDataFetcher.getAllProfile())
+                          .dataFetcher("getProfiles", profileGraphQLDataFetcher.getDataFetcherAllProfile())
+                  )
+                  .type(newTypeWiring("Resolver")
+                          .dataFetcher("getProfileById",profileGraphQLDataFetcher.getDataFetcherProfileById())
+                  )
+                  .type(newTypeWiring("Mutation")
 
                   )
                   .build();

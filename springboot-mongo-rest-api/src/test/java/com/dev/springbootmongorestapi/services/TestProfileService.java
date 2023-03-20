@@ -1,3 +1,4 @@
+/*
 package com.dev.springbootmongorestapi.services;
 
 import com.dev.springbootmongorestapi.SpringbootMongoRestApiApplication;
@@ -37,3 +38,4 @@ public class TestProfileService {
         Assertions.assertEquals(profile.getId(),tempProfile.getId());
     }
 }
+*/

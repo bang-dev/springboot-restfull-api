@@ -38,7 +38,7 @@ public class ProfileDTO implements Serializable {
     @ApiModelProperty(value = "The profile updatedAt", example = "updated by current time")
     private LocalDateTime updatedAt;
     private String createdBy;
-    private String updateBy;
+    private String updatedBy;
 
     public ProfileDTO() {
         this.id = GenerateUtils.generateNewId(UUID.randomUUID().toString());

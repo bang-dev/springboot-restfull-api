@@ -2,6 +2,7 @@ package com.dev.springbootgraphqlrestapi;
 
 import com.dev.springbootgraphqlrestapi.basics.ProfileType;
 import com.dev.springbootgraphqlrestapi.basics.QueryType;
+//import com.dev.springbootgraphqlrestapi.datafetchers.ProfileGraphQLDataFetcher;
 import com.dev.springbootgraphqlrestapi.datafetchers.ProfileGraphQLDataFetcher;
 import com.dev.springbootgraphqlrestapi.mutations.ProfileMutation;
 import com.dev.springbootgraphqlrestapi.resolvers.ProfileResolver;
@@ -20,7 +21,7 @@ public class BasicConfigs extends BeanConfigs {
     public GraphQL graphQL() {
         // Define the schema
         GraphQLSchema schema = GraphQLSchema.newSchema()
-                .query(QueryType.QUERY_TYPE)
+                .query(ProfileType.PROFILE_TYPE)
                 .build();
 
         // Create the GraphQL bean
@@ -29,10 +30,11 @@ public class BasicConfigs extends BeanConfigs {
     }
 
 
-    @Bean
+@Bean
     public ProfileGraphQLDataFetcher graphQLDataFetcher(){
         return new ProfileGraphQLDataFetcher();
     }
+
 
 
     @Bean
