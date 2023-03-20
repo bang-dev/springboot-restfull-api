@@ -1,12 +1,19 @@
 package com.dev.springbootgraphqlrestapi.basics;
 
 import com.dev.springbootgraphqlrestapi.utils.datatypes.GraphQLDate;
+import com.dev.springbootgraphqlrestapi.utils.datatypes.GraphQLDateTime;
+import graphql.Scalars;
+import graphql.scalars.datetime.DateScalar;
+import graphql.scalars.datetime.DateTimeScalar;
 import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLScalarType;
+import org.springframework.stereotype.Component;
 
 import static graphql.Scalars.*;
 
+@Component
 public class ProfileType {
-    public static final GraphQLObjectType profileType = GraphQLObjectType.newObject()
+    public static final GraphQLObjectType PROFILE_TYPE = GraphQLObjectType.newObject()
             .name("Profile")
             .description("A user profile")
             .field(field -> field

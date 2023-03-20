@@ -8,6 +8,7 @@ import com.dev.springbootmongorestapi.entities.Profile;
 import com.dev.springbootmongorestapi.mappers.IProfileMapper;
 import org.dataloader.BatchLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class ProfileBatchLoader implements BatchLoader<String, ProfileDTO> {
     }
 
 
-    public BatchLoader<String,ProfileDTO> getProfileBatchLoader(){
-        return data -> (CompletionStage<List<ProfileDTO>>) profileQuery.getProfiles();
+    public BatchLoader getProfileBatchLoader(){
+        return data -> (CompletionStage<List>) profileQuery.getProfiles();
     }
 }

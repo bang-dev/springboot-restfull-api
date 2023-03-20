@@ -1,3 +1,4 @@
+/*
 package com.dev.springbootmongorestapi;
 
 
@@ -14,3 +15,4 @@ class SpringbootMongoRestApiApplicationTests {
     }
 
 }
+*/

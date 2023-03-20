@@ -14,7 +14,7 @@ public class GraphQLBlob {
     private static final String DEFAULT_DESCRIPTION = "Custom scalar for representing binary data";
 
     @Bean
-    public GraphQLScalarType blobScalar() {
+    public static GraphQLScalarType blobScalar() {
         return GraphQLScalarType.newScalar()
                 .name(DEFAULT_NAME)
                 .description(DEFAULT_DESCRIPTION)

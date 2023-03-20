@@ -11,6 +11,7 @@ import graphql.schema.DataFetchingEnvironment;
 import org.dataloader.BatchLoader;
 import org.dataloader.DataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ProfileGraphQLDataFetcher implements DataFetcher<CompletableFuture<
 
 
     @Autowired
+    @Qualifier("profileResolver")
     private ProfileResolver profileResolver;
 
     @Autowired
@@ -67,8 +69,15 @@ public class ProfileGraphQLDataFetcher implements DataFetcher<CompletableFuture<
                 });
     }
 
-    public DataFetcher<CompletableFuture<ProfileDTO>> getAllProfile(){
-        return dataFetchingEnvironment-> (CompletableFuture<ProfileDTO>) profileQuery.getProfiles();
+    public DataFetcher getDataFetcherAllProfile(){
+        return dataFetchingEnvironment->  profileQuery.getProfiles();
+    }
 
+    public DataFetcher getDataFetcherProfileById(){
+        return environment -> {
+            String id = environment.getArgument("id");
+            ProfileDTO profileDTO = profileResolver.getProfileById(id);
+            return  profileDTO;
+        };
     }
 }

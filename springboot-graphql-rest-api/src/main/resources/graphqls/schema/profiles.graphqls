@@ -1,0 +1,37 @@
+scalar String
+scalar DateTime
+scalar Int
+schema {
+    query: Query
+    mutation: Mutation
+   # resolver: Resolver
+}
+
+type Query {
+    profile(id: String!): Profile
+    getProfiles:[Profile!]
+}
+#type Resolver{
+#
+#}
+type Mutation{
+    createProfile(id:String!,firstName:String!,lastName:String!,birthday:DateTime!,email:String!,avatar:String!): Profile
+}
+
+
+
+type Profile {
+   id: String!
+    firstName:String!
+    lastName:String!
+    birthday:String
+    email:String
+    avatar:String
+    path:String
+    authToken:String
+    version:Int
+    createdAt: DateTime
+    updatedAt: DateTime
+    createdBy:String
+    updatedBy:String
+}
