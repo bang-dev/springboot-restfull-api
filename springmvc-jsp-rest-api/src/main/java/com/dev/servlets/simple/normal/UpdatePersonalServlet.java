@@ -1,4 +1,4 @@
 package com.dev.servlets.simple.normal;
 
-public class CreateTestServlet {
+public class UpdatePersonalServlet {
 }

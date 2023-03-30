@@ -1,0 +1,17 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+     <bean id="employee" class="com.dev.models.Employee">
+          <property name="id" value="a111"/>
+          <property name="firstName" value="A"/>
+          <property name="lastName" value="Nguyễn Văn"/>
+     </bean>
+     <bean id="absEmployeeService" class="com.dev.services.AbsEmployeeService" abstract="true">
+
+     </bean>
+     <bean id="employeeServiceImpl" class="com.dev.services.impls.EmployeeServiceImpl">
+          <constructor-arg value="employeeServiceImpl"/>
+          <property name="msgString" value="Welcome hello !"/>
+     </bean>
+</beans>

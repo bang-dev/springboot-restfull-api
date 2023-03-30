@@ -1,13 +1,14 @@
 package com.dev.daos;
 
-import com.dev.dtos.TestDTO;
+import com.dev.builders.PersonalBuilder;
+import com.dev.dtos.PersonalDTO;
 import com.dev.utils.ConnectorDatabaseUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestDAO {
+public class PersonalDAO {
     private Connection connection;
 
     public Connection getConnection() {
@@ -17,14 +18,16 @@ public class TestDAO {
         this.connection = connection;
     }
 
-    public int createTest(TestDTO testDTO) {
+    public int createPersonal(PersonalDTO personalDTO) {
         int result = 0;
         try {
            ConnectorDatabaseUtils.openConnectionDatabase();
-                String query = "INSERT INTO TestDTO(id, content, createAt) VALUES(?,?)";
+                String query = "INSERT INTO Personal(id, firtName, lastName,major) VALUES(?,?,?,?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
-                                  preparedStatement.setString(1, testDTO.getContent());
-                                  preparedStatement.setString(2, testDTO.getCreateAt().toString());
+                                  preparedStatement.setString(1, personalDTO.getId());
+                                  preparedStatement.setString(2, personalDTO.getFirstName());
+                                  preparedStatement.setString(3, personalDTO.getLastName());
+                                  preparedStatement.setString(4, personalDTO.getMajor());
                          result = preparedStatement.executeUpdate();
                                   preparedStatement.close();
            ConnectorDatabaseUtils.disConnection();
@@ -34,16 +37,18 @@ public class TestDAO {
         return result;
     }
 
-    public int updateTest(TestDTO testDTO) {
+    public int updatePersonal(PersonalDTO personalDTO) {
         int result = 0;
         try {
             ConnectorDatabaseUtils.openConnectionDatabase();
-                String query = "UPDATE TestDTO SET id=?, content=?";
+                String query = "UPDATE Personal SET id=?, firtName=?, lastName=?,major=?";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
-                         preparedStatement.setString(1, testDTO.getContent());
-                         preparedStatement.setString(2, testDTO.getCreateAt().toString());
-                result = preparedStatement.executeUpdate();
-                         preparedStatement.close();
+                                  preparedStatement.setString(1, personalDTO.getId());
+                                  preparedStatement.setString(2, personalDTO.getFirstName());
+                                  preparedStatement.setString(3, personalDTO.getLastName());
+                                  preparedStatement.setString(4, personalDTO.getMajor());
+                         result = preparedStatement.executeUpdate();
+                                  preparedStatement.close();
             ConnectorDatabaseUtils.disConnection();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,55 +56,59 @@ public class TestDAO {
         return result;
     }
 
-    public TestDTO getTestById(String id) {
-        TestDTO testDTO = new TestDTO();
+    public PersonalDTO getPersonalById(String id) {
+        PersonalDTO personalDTO = new PersonalBuilder().builder();
         try {
             ConnectorDatabaseUtils.openConnectionDatabase();
-                String query = "SELECT *FROM TestDTO WHERE(id=?)";
+                String query = "SELECT *FROM Personal WHERE(id=?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
                         preparedStatement.setString(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                testDTO.setId(resultSet.getString(1));
-                testDTO.setContent(resultSet.getString(2));
-                testDTO.setCreateAt(resultSet.getDate(3));
+                personalDTO.setId(resultSet.getString(1));
+                personalDTO.setFirstName(resultSet.getString(2));
+                personalDTO.setLastName(resultSet.getString(3));
+                personalDTO.setMajor(resultSet.getString(4));
             }
                         preparedStatement.close();
             ConnectorDatabaseUtils.disConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return testDTO;
+        return personalDTO;
     }
 
-    public List<TestDTO> getAllTest(int start, int total) {
-        List<TestDTO> testDTOS = new ArrayList<>();
+    public List<PersonalDTO> getAllPersonal(int start, int total) {
+        List<PersonalDTO> personalDTOS = new ArrayList<>();
         try {
             ConnectorDatabaseUtils.openConnectionDatabase();
-                String query = "SELECT *FROM TestDTO limit" + (start - 1) + "," + total;
+                String query = "SELECT *FROM Personal limit" + (start - 1) + "," + total;
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                TestDTO testDTO = new TestDTO();
-                testDTO.setId(resultSet.getString(1));
-                testDTO.setContent(resultSet.getString(2));
-                testDTO.setCreateAt(resultSet.getDate(3));
-                testDTOS.add(testDTO);
+                PersonalDTO personalDTO =
+                        new PersonalBuilder()
+                                .personalBuilderID(resultSet.getString(1))
+                                .personalBuilderFirstName(resultSet.getString(2))
+                                .personalBuilderLastName(resultSet.getString(3))
+                                .personalBuilderMajor(resultSet.getString(4))
+                                .builder();
+                personalDTOS.add(personalDTO);
             }
                                     preparedStatement.close();
             ConnectorDatabaseUtils.disConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return testDTOS;
+        return personalDTOS;
     }
 
-    public int deleteTest(String id) {
+    public int deletePersonal(String id) {
         int result = 0;
         try {
             ConnectorDatabaseUtils.openConnectionDatabase();
-                String query = "DELETE FROM TestDTO WHERE (id=?)";
+                String query = "DELETE FROM Personal WHERE (id=?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
                                   preparedStatement.setString(1, id);
                          result = preparedStatement.executeUpdate();
