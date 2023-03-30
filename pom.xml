@@ -18,8 +18,8 @@
         <module>springboot-cloudinary-rest-api</module>
         <module>springboot-entities-rest-api</module>
         <module>springboot-swagger-rest-api</module>
-        <module>springboot-graphql-rest-api</module>
         <module>springmvc-jsp-rest-api</module>
+        <module>spring-dependency-injection-and-inversion-of-control</module>
     </modules>
     <properties>
         <java.version>8</java.version>

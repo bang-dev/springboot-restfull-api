@@ -16,6 +16,11 @@ public class ConnectorDatabaseUtils {
         passConnect = "abc123";
     }
 
+    public ConnectorDatabaseUtils() {
+        uriConnect = "jdbc:mysql://localhost:3306/db_dev_blog_personal"; // Uniform Resource Identifier
+        userConnect = "root";
+        passConnect = "abc123";
+    }
 
     public static String getUriConnect() {
         return uriConnect;
@@ -51,7 +56,7 @@ public class ConnectorDatabaseUtils {
 
     public static Connection openConnectionDatabase() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(uriConnect, userConnect, passConnect);
         } catch (ClassNotFoundException | SQLException exc) {
             exc.printStackTrace();
